@@ -18,7 +18,7 @@ app.use('/api/note',note)
 app.use('/api/todo',todo)
 app.use('/api/auth',auth)
 
-const MANGO=process.env.MANGO
+const MONGO_URI = process.env.MONGO_URI;
 const PORT=process.env.PORT
 
 app.get("/",(req,res)=>{
