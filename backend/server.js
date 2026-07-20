@@ -25,7 +25,7 @@ app.get("/",(req,res)=>{
     res.json({message:"app is running harsha"})
 })
 
-mongoose.connect(MANGO)
+mongoose.connect(MONGO_URI)
 .then(()=>{
     console.log("server connected");
     app.listen(PORT,()=>{
