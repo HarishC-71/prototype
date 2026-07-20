@@ -1,7 +1,5 @@
 const express=require('express')
 const mongoose=require('mongoose')
-const dns = require('dns');
-dns.setServers(['8.8.8.8', '8.8.4.4']);
 const cors=require('cors')
 const dotenv=require('dotenv')
 dotenv.config()
@@ -28,7 +26,12 @@ app.get("/",(req,res)=>{
 })
 
 mongoose.connect(MONGO_URI)
-    .then(() => console.log("Database connected successfully"))
-    .catch((err) => {
-        console.error("CRITICAL ERROR:", err.message); // This prints the exact reason
-    });
+.then(()=>{
+    console.log("server connected");
+    app.listen(PORT,()=>{
+        console.log("app is running");
+    })
+})
+.catch((err)=>{
+    console.log("failed");
+})
