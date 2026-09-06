@@ -11,15 +11,17 @@ export const AuthProvider = ({ children }) => {
     // Check if user is logged in
     const checkAuth = async () => {
       const token = localStorage.getItem('token');
-      if (token) {
+      if (token && token !== 'undefined' && token !== 'null') {
         try {
-          // Assuming backend has a /users/me endpoint to fetch current user
           const response = await api.get('/auth/profile');
           setUser(response.data);
         } catch (error) {
-          console.error("Failed to fetch user", error);
+          console.error("Failed to fetch user profile:", error);
           localStorage.removeItem('token');
+          setUser(null);
         }
+      } else {
+        localStorage.removeItem('token');
       }
       setLoading(false);
     };
