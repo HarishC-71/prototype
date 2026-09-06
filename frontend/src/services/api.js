@@ -2,9 +2,13 @@ import axios from 'axios';
 
 const getBaseURL = () => {
   const envUrl = import.meta.env.VITE_API_URL;
-  const url = envUrl ? envUrl.trim() : 'http://localhost:5000';
-  const cleanUrl = url.replace(/\/+$/, '');
-  return cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
+  let url = envUrl ? envUrl.trim() : 'http://localhost:5000';
+  url = url.replace(/\/+$/, '');
+  url = url.replace(/\/api\/auth$/, '').replace(/\/auth$/, '');
+  if (!url.endsWith('/api')) {
+    url = `${url}/api`;
+  }
+  return url;
 };
 
 const api = axios.create({

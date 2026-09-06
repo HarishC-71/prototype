@@ -14,7 +14,13 @@ try {
 dotenv.config()
 const app=express();
 
-app.use(cors())
+// Configure CORS explicitly
+app.use(cors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
 app.use(express.json())
 
 const expense=require('./routes/expense_router')
@@ -22,10 +28,17 @@ const note=require('./routes/note_router')
 const todo=require('./routes/todo_router')
 const auth=require('./routes/login_routes')
 
+// Primary API routes
 app.use('/api/expense',expense)
 app.use('/api/note',note)
 app.use('/api/todo',todo)
 app.use('/api/auth',auth)
+
+// Route aliases to support /auth/signup, /auth/login, etc. directly
+app.use('/expense',expense)
+app.use('/note',note)
+app.use('/todo',todo)
+app.use('/auth',auth)
 
 const MONGO_URI = process.env.MONGO_URI;
 const PORT=process.env.PORT||5000
