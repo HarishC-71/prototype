@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signup = async (name, email, password) => {
-    await api.post('/auth/sign', { name, email, password });
+    await api.post('/auth/signup', { name, email, password });
     await login(email, password);
   };
 

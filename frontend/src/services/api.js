@@ -1,7 +1,14 @@
 import axios from 'axios';
 
+const getBaseURL = () => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  const url = envUrl ? envUrl.trim() : 'http://localhost:5000';
+  const cleanUrl = url.replace(/\/+$/, '');
+  return cleanUrl.endsWith('/api') ? cleanUrl : `${cleanUrl}/api`;
+};
+
 const api = axios.create({
-  baseURL: 'https://model-1-wo6q.onrender.com', // Adjust depending on your backend
+  baseURL: getBaseURL(),
   headers: {
     'Content-Type': 'application/json',
   },
