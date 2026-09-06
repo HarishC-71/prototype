@@ -34,15 +34,34 @@ app.get("/",(req,res)=>{
     res.json({message:"app is running harsha"})
 })
 
-mongoose.connect(MONGO_URI)
-    .then(() => {
+const connectDB = async () => {
+    try {
+        await mongoose.connect(MONGO_URI);
         console.log("Database connected successfully");
+    } catch (err) {
+        console.warn("\n-----------------------------------------------------------");
+        console.warn("WARNING: Primary MONGO_URI connection failed:", err.message);
+        console.warn("Please check your MongoDB Atlas username/password in .env");
+        console.warn("-----------------------------------------------------------\n");
 
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
-    })
-    .catch((err) => {
-        console.error("CRITICAL ERROR:", err.message);
-        process.exit(1);
+        const fallbackUri = "mongodb://127.0.0.1:27017/mydatabase";
+        if (MONGO_URI !== fallbackUri) {
+            console.log("Attempting fallback connection to local MongoDB (mongodb://127.0.0.1:27017/mydatabase)...");
+            try {
+                await mongoose.connect(fallbackUri);
+                console.log("Connected to local MongoDB successfully!");
+            } catch (fallbackErr) {
+                console.error("CRITICAL ERROR: Failed to connect to local MongoDB:", fallbackErr.message);
+                process.exit(1);
+            }
+        } else {
+            process.exit(1);
+        }
+    }
+
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
     });
+};
+
+connectDB();
