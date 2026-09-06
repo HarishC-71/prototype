@@ -2,6 +2,15 @@ const express=require('express')
 const mongoose=require('mongoose')
 const cors=require('cors')
 const dotenv=require('dotenv')
+const dns=require('dns')
+
+// Set Google DNS to fix SRV lookup issues on Windows local environments
+try {
+    dns.setServers(['8.8.8.8', '8.8.4.4']);
+} catch (e) {
+    // fallback if custom DNS set fails
+}
+
 dotenv.config()
 const app=express();
 
