@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const getBaseURL = () => {
   const envUrl = import.meta.env.VITE_API_URL;
-  let url = envUrl ? envUrl.trim() : (import.meta.env.PROD ? 'https://model-1-w0qg.onrender.com' : 'http://localhost:5000');
+  let url = envUrl ? envUrl.trim() : (import.meta.env.PROD ? 'https://model-1-mo6q.onrender.com' : 'http://localhost:5000');
   url = url.replace(/\/+$/, '');
   url = url.replace(/\/api\/auth$/, '').replace(/\/auth$/, '');
   if (!url.endsWith('/api')) {
