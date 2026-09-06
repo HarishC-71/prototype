@@ -37,21 +37,25 @@ app.get("/",(req,res)=>{
 const connectDB = async () => {
     try {
         await mongoose.connect(MONGO_URI);
-        console.log("Database connected successfully");
+        console.log("Database connected successfully to MongoDB Atlas!");
     } catch (err) {
         console.warn("\n-----------------------------------------------------------");
         console.warn("WARNING: Primary MONGO_URI connection failed:", err.message);
-        console.warn("Please check your MongoDB Atlas username/password in .env");
+        console.warn("Please update your MongoDB Atlas password in .env or MongoDB Atlas dashboard.");
         console.warn("-----------------------------------------------------------\n");
 
-        const fallbackUri = "mongodb://127.0.0.1:27017/mydatabase";
-        if (MONGO_URI !== fallbackUri) {
-            console.log("Attempting fallback connection to local MongoDB (mongodb://127.0.0.1:27017/mydatabase)...");
-            try {
-                await mongoose.connect(fallbackUri);
-                console.log("Connected to local MongoDB successfully!");
-            } catch (fallbackErr) {
-                console.error("CRITICAL ERROR: Failed to connect to local MongoDB:", fallbackErr.message);
+        if (process.env.NODE_ENV !== 'production') {
+            const fallbackUri = "mongodb://127.0.0.1:27017/mydatabase";
+            if (MONGO_URI !== fallbackUri) {
+                console.log("Attempting fallback connection to local MongoDB (mongodb://127.0.0.1:27017/mydatabase)...");
+                try {
+                    await mongoose.connect(fallbackUri);
+                    console.log("Connected to local MongoDB successfully!");
+                } catch (fallbackErr) {
+                    console.error("CRITICAL ERROR: Failed to connect to local MongoDB:", fallbackErr.message);
+                    process.exit(1);
+                }
+            } else {
                 process.exit(1);
             }
         } else {
